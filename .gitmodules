@@ -1,8 +1,3 @@
-[submodule "OCA/rest-framework"]
-	path = OCA/rest-framework
-	url = git@github.com:OCA/rest-framework.git
-	branch = 13.0
-
 [submodule "nybblegroup/bs-lacardeuse-erp-odoo"]
 	path = nybblegroup/bs-lacardeuse-erp-odoo
 	url = git@github.com:nybblegroup/bs-lacardeuse-erp-odoo.git
