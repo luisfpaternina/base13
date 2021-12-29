@@ -2,6 +2,8 @@ from odoo.addons.component.core import Component
 from odoo.addons.base_rest import restapi
 from odoo import fields
 import json
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class SaleOrder(Component):
@@ -13,22 +15,36 @@ class SaleOrder(Component):
          API Services to search and create Sale Order
     """
     
-    @restapi.method(
-        [(["/<string:name>/search"], "GET")],
-        output_param=restapi.CerberusValidator("_validator_search"),
-        auth="public",
-    )
+    #@restapi.method(
+    #    [(["/<string:name>/search"], "GET")],
+    #    output_param=restapi.CerberusValidator("_validator_search"),
+    #    auth="public",
+    #)
     
     def search(self, name):
-        sale = self.env["sale.order"].search([('name','=',name)])
+        list = []
+        dict = {}
+        sale = self.env["account.move"].search([('name','=',name)])
         if sale:
+            stock = self.env["stock.picking"].search([("origin","=",sale.invoice_origin)],limit=1)
+            for item in stock.move_line_ids_without_package:
+                dict = {
+                    "product_id": item.product_id.id,
+                    "product_name": item.product_id.name,
+                    "product_uom_qty": item.product_uom_qty
+                }
+                list.append(dict)
             res = {
                     "name": sale.name,
-                    "state": sale.state
+                    "state": sale.state,
+                    "invoice_payment_state": sale.invoice_payment_state,
+                    "stock_name": stock.name,
+                    "move_line_ids_without_package": list,
                   }
+            
         else:
             res = {
-                    "message": "No existe una sale order con ese nombre"
+                    "message": "No existe una Factura con ese nombre"
                   }
         return res
     
@@ -53,15 +69,33 @@ class SaleOrder(Component):
         invoice = self.env["account.move"].search([("invoice_origin","=",sale.name)],limit=1)
         invoice.write({"journal_id": params["journal_id"]})
         invoice.action_post()
+        stock = self.env["stock.picking"].search([("origin","=",sale.name)],limit=1)
+        stock.action_assign()
+        for item in params["order_lines"]:
+            for value in stock.move_ids_without_package:
+                if value.product_id.id == item["product_id"] and item["entrega_tienda"] == "SI":
+                    value.write({"quantity_done": item["product_uom_qty"]})
+        stock.button_validate()
         res["message"] = "se creo la Factura: {sale}"\
                 .format(sale = invoice.name)
         return res
     
     def _validator_search(self):
         res = {
-                "state": {"type":"string", "required": True},
-                "name": {"type":"string", "required": False},
-                "message": {"type":"string", "required": False}
+                "state": {"type":"string", "required": False},
+                "name": {"type":"string", "required": True},
+                "message": {"type":"string", "required": False},
+                "stock_name": {"type":"string", "required": False},
+                "invoice_payment_state": {"type":"string", "required": False},
+                "move_line_ids_without_package": {"type":"list",
+                                "schema": {"type": "dict",
+                                        "schema": {
+                                            "product_id": {"type":"integer", "required": False},
+                                            "product_name": {"type":"string", "required": False},
+                                            "product_uom_qty": {"type":"float", "required": False}
+                                                  }
+                                          }
+                               }
               }
         return res
 
