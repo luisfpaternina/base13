@@ -12,42 +12,27 @@ class CoeficienteTarjetas(Component):
     _usage = "Coeficiente Tarjetas"
     _collection = "contact.services.private.services"
     _description = """
-         API Services to search and create sale order tipo entrega
+         API Services to search coeficiente de tarjetas
     """
     
-    #@restapi.method(
-    #    [(["/<string:start_date>/<string:end_date>/<string:bank>/<string:card>/<int:quota>/search"], "GET")],
-    #    output_param=restapi.CerberusValidator("_validator_search"),
-    #    auth="public",
-    #)
     
-    def search(self,start_date,end_date,bank,card,quota):
-        start = fields.Date.to_date(start_date)
-        end = fields.Date.to_date(end_date)
-        _logger.info("tipo quota***************")
-        _logger.info(bank)
-        _logger.info(card)
-        _logger.info(quota)
-        _logger.info(start)
-        _logger.info(end)
+    def create(self,**params):
         domain = [
-            ("start_date","=",start),
-            ("end_date","=",end),
-            ("bank_id.name","=",bank),
-            ("card_id.name","=",card),
-            ("quota","=",int(quota))
+            ("start_date","=",params["start_date"]),
+            ("end_date","=",params["end_date"]),
+            ("bank_id","=",params["bank"]),
+            ("card_id","=",params["card"]),
+            ("quota","=",params["quota"])
         ]
-        _logger.info(domain)
         coeficiente_tarjetas = self.env["coeficiente.tarjetas"].search(domain)
         if coeficiente_tarjetas:
             res = {
-                     "id": id,
                     "start_date": coeficiente_tarjetas.start_date,
                     "end_date": coeficiente_tarjetas.end_date,
                     "bank_code": coeficiente_tarjetas.bank_id.bic,
-                    "bank": coeficiente_tarjetas.bank_id.name,
+                    "bank": coeficiente_tarjetas.bank_id.id,
                     "card_code": coeficiente_tarjetas.card_id.code,
-                    "card": coeficiente_tarjetas.card_id.name,
+                    "card": coeficiente_tarjetas.card_id.id,
                     "quota": coeficiente_tarjetas.quota,
                     "rate": coeficiente_tarjetas.rate
                   }
@@ -57,17 +42,17 @@ class CoeficienteTarjetas(Component):
                   }
         return  res
     
-    def _validator_search(self):
+    def _validator_create(self):
         res = {
                 "id": {"type":"integer", "required": False},
                 "start_date": {"type":"string", "required": True},
                 "end_date": {"type":"string", "required": True},
                 "bank_code": {"type":"string", "required": False},
-                "bank": {"type":"string", "required": True},
+                "bank": {"type":"integer", "required": False},
                 "card_code": {"type":"integer", "required": False},
-                "card": {"type":"string", "required": True},
+                "card": {"type":"integer", "required": False},
                 "message": {"type":"string", "required": False},
-                "quota": {"type":"string", "required": True},
+                "quota": {"type":"integer", "required": False},
                 "rate": {"type":"float", "required": False},
               }
         return res
