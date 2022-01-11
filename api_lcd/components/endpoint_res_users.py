@@ -1,16 +1,15 @@
 from odoo.addons.component.core import Component
 from odoo.addons.base_rest import restapi
 import json
-import logging
-logger = logging.getLogger(__name__)
 
-class SaleOrderZona(Component):
+
+class ResUsers(Component):
     _inherit = 'base.rest.service'
-    _name = 'sale.order.zona.service'
-    _usage = 'Sale Order Zona'
+    _name = 'res.users.service'
+    _usage = 'Res User'
     _collection = 'contact.services.private.services'
     _description = """
-         API Services to search sale order zona
+         API Services to search res users
     """
     
     @restapi.method(
@@ -23,38 +22,35 @@ class SaleOrderZona(Component):
         dict = {}
         list = []
         if name == "all":
-            zona = self.env["sale.order.zona"].search([])
+             users = self.env["res.users"].search([])
         else:
-            zona = self.env["sale.order.zona"].search([('name','=',name)])
-        if zona:
-            for item in zona:
+            users = self.env["res.users"].search([('name','=',name)])
+        if users:
+            for item in users:
                 dict = {
                          "id": item.id,
-                        "name": item.name
+                        "name": item.name,
                       }
                 list.append(dict)
             res = {
-                    "sale_order_canal": list
+                    "res_users": list
                   }
         else:
             res = {
-                    "id": id,
-                    "message": "No existe una zona con este id"
+                    "message": "No existe un usuarios con este nombre"
                   }
         return res
     
     def _validator_search(self):
         res = {
-                "sale_order_canal": {"type":"list", 
+                "res_users": {"type":"list", 
                                        "schema": { 
                                         "type": "dict",
                                         "schema": {
                                                     "id": {"type":"integer", "required": False},
-                                                    "name": {"type":"string", "required": False},
-                                                    "codigo": {"type":"string", "required": False},
-                                                    "message": {"type":"string", "required": False},
+                                                    "name": {"type":"string", "required": True}
                                         }
                                        }
-                                }
+                                   }
               }
         return res
