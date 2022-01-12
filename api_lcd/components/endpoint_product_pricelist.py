@@ -38,12 +38,19 @@ class ProductPricelist(Component):
                         if item.base_pricelist_id:
                             for items in item.base_pricelist_id.item_ids:
                                 price = items.fixed_price
+                                price_discount = 0
+                                price_surcharge = 0
                                 if item.product_tmpl_id.id == items.product_tmpl_id.id:
-                                    price = items.fixed_price - (items.fixed_price * (item.price_discount/100))
+                                    price_discount = item.price_discount
+                                    price_surcharge = item.price_surcharge
+                                    price = items.fixed_price - (items.fixed_price * (price_discount/100)) + price_surcharge
                                 dict = {
                                     "product_id": items.product_tmpl_id.id,
                                     "product_name": items.product_tmpl_id.name,
-                                    "price": price
+                                    "price_fix": price,
+                                    "price": items.fixed_price,
+                                    "price_discount": price_discount,
+                                    "price_surcharge": price_surcharge
                                     }
                                 list.append(dict)
                         else:
@@ -73,7 +80,10 @@ class ProductPricelist(Component):
                                         "schema": {
                                                "product_id":{"type":"integer", "required": False},
                                                "product_name":{"type":"string", "required": False},
-                                               "price":{"type":"float", "required": False}
+                                               "price":{"type":"float", "required": False},
+                                               "price_fix":{"type":"float", "required": False},
+                                               "price_discount":{"type":"float", "required": False},
+                                               "price_surcharge":{"type":"float", "required": False}
                                         }
                                        }
                                     }
