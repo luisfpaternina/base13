@@ -1,0 +1,210 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+<!-- Optimización Logistica Search - tree - form - action-->
+	    <record id="rutas_horarios_view_search_ol" model="ir.ui.view">
+		    <field name="name">rutas_horarios_view_search_ol</field>
+		    <field name="model">lcd.rutas_horarios</field>
+		    <field name="arch" type="xml">
+			    <search>
+				    <field name="name"/>
+				    <field name="camion_id"/>
+				    <field name="fecha_despacho"/>
+				    <field name="bodega_id"/>
+				    <field name="optimizacion_id"/>
+				    <field name="estado"/>
+                    <separator/>
+                        <filter string="Borrador" domain="[('estado', '=', 'borrador')]" name="borrador_filter"/>
+                        <filter string="En Proceso" domain="[('estado', '=', 'en_proceso')]" name="en_proceso_filter"/>
+                        <filter string="Terminado" domain="[('estado', '=', 'terminado')]" name="terminado_filter"/>
+                    <separator/>
+                        <filter string="Camión" name="camion_group" domain="[]" context="{'group_by': 'camion_id'}"/>
+                        <filter string="Fecha Despacho" name="fecha_despacho_group" domain="[]" context="{'group_by': 'fecha_despacho'}"/>
+                        <filter string="Bodega" name="bodega_group" domain="[]" context="{'group_by': 'bodega_id'}"/>
+                        <filter string="Optimización" name="optimizacion_group" domain="[]" context="{'group_by': 'optimizacion_id'}"/>
+                        <filter string="Estado" name="estado_group" domain="[]" context="{'group_by': 'estado'}"/>
+			    </search>
+		    </field>
+	    </record>
+	    <record id="rutas_horarios_view_tree_ol" model="ir.ui.view">
+		    <field name="name">rutas_horarios_view_tree_ol</field>
+		    <field name="model">lcd.rutas_horarios</field>
+		    <field name="arch" type="xml">
+			    <tree>
+				    <field name="name"/>
+				    <field name="camion_id"/>
+				    <field name="fecha_despacho"/>
+				    <field name="bodega_id"/>
+				    <field name="optimizacion_id"/>
+				    <field name="estado"/>
+			    </tree>
+		    </field>
+	    </record>
+	    <record id="rutas_horarios_view_form_ol" model="ir.ui.view">
+		    <field name="name">rutas_horarios_view_form_ol</field>
+		    <field name="model">lcd.rutas_horarios</field>
+		    <field name="arch" type="xml">
+			    <form string="Ruta">
+                    <header>
+                        <!--button name="confirmar" type="object" string="Confirmar" class="oe_highlight" attrs="{'invisible': [('estado', '!=','borrador')]}"/-->
+                        <field name="estado" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+        				    <field name="camion_id"/>
+        				    <field name="bodega_id"/>
+        				    <field name="fecha_despacho" attrs="{'readonly': [('estado', 'in',['en_proceso','terminado'])]}"/>
+        				    <field name="optimizacion_id" readonly="1"/>
+                            <button name="calcular_ruta" type="object" string="Cargar Ruta" class="oe_highlight" attrs="{'invisible': [('estado', 'in',['en_proceso','terminado'])]}"/>
+                        </group>
+                        <group>
+        				    <field name="warnings" widget="html" readonly="1" nolabel="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Detalle" name="detalle_rh">
+                                <group col="4">
+                                    <field name="items_group" nolabel="1">
+                                        <tree editable="bottom" default_order="sequence">
+                        				    <field name="sequence" widget="handle"/>
+                        				    <field name="pedido" invisible="1"/>
+                        				    <field name="pedido_id"/>
+                        				    <field name="partner_id"/>
+                        				    <field name="direccion"/>
+                        				    <field name="telefono"/>
+                        				    <field name="celular"/>
+                        				    <field name="tipo_entrega_id"/>
+                        				    <field name="zona_id"/>
+                                        </tree>
+                                    </field>
+                                    <field name="items">
+                                        <tree editable="bottom" default_order="sequence">
+                        				    <field name="sequence" invisible="1"/>
+                        				    <field name="optimizacion_det_id" invisible="1"/>
+                        				    <field name="pedido" invisible="1"/>
+                        				    <field name="pedido_id"/>
+                        				    <field name="fecha_pedido" invisible="1"/>
+                        				    <field name="partner_id" invisible="1"/>
+                        				    <field name="direccion" invisible="1"/>
+                        				    <field name="product_id"/>
+                        				    <field name="volumen"/>
+                        				    <field name="cantidad"/>
+                        				    <field name="fecha_cierta" invisible="1"/>
+                        				    <field name="categ_id"/>
+                        				    <field name="zona_id" invisible="1"/>
+                        				    <field name="canal_venta_id" invisible="1"/>
+                        				    <field name="tipo_entrega_id" invisible="1"/>
+                        				    <field name="estado" readonly="1"/>
+                        				    <field name="color" invisible="0"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+			    </form>
+		    </field>
+	    </record>
+        <record id="view_lcd_rutas_horarios_calendar" model="ir.ui.view">
+            <field name="name">view_lcd_rutas_horarios_calendar</field>
+            <field name="model">lcd.rutas_horarios</field>
+            <field name="arch" type="xml">
+                <calendar string="Rutas/Horarios" date_start="fecha_despacho" color="estado" hide_time="true" quick_add="0" mode="month">
+                    <field name="fecha_despacho"/>
+                    <field name="name"/>
+                    <field name="camion_id"/>
+                    <field name="bodega_id"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record id="action_rutas_horarios" model="ir.actions.act_window">
+            <field name="name">Rutas/Horarios</field>
+            <field name="res_model">lcd.rutas_horarios</field>
+            <field name="view_mode">tree,form,calendar</field>
+        </record>
+
+<!-- Optimización Logistica Detalle Search - tree - form - action-->
+	    <record id="lcd_rutas_horarios_detalle_view_search_ol" model="ir.ui.view">
+		    <field name="name">lcd_rutas_horarios_detalle_view_search_ol</field>
+		    <field name="model">lcd.rutas_horarios_detalle</field>
+		    <field name="arch" type="xml">
+			    <search>
+				    <field name="ruta_id"/>
+				    <field name="pedido"/>
+				    <field name="pedido_id"/>
+				    <field name="fecha_pedido"/>
+				    <field name="partner_id"/>
+				    <field name="direccion"/>
+				    <field name="fecha_cierta"/>
+				    <field name="product_id"/>
+				    <field name="categ_id"/>
+				    <field name="canal_venta_id"/>
+				    <field name="tipo_entrega_id"/>
+				    <field name="zona_id"/>
+				    <field name="estado"/>
+                    <separator/>
+                        <filter string="Pendiente" domain="[('estado', '=', 'pendiente')]" name="pendiente_filter"/>
+                        <filter string="En Proceso" domain="[('estado', '=', 'en_proceso')]" name="en_proceso_filter"/>
+                        <filter string="Confirmado" domain="[('estado', '=', 'confirmado')]" name="confirmado_filter"/>
+                        <filter string="Despachado" domain="[('estado', '=', 'despachado')]" name="despachado_filter"/>
+                        <filter string="Reprogramación" domain="[('estado', '=', 'reprogramacion')]" name="reprogramacion_filter"/>
+                        <filter string="Terminado" domain="[('estado', '=', 'terminado')]" name="terminado_filter"/>
+                    <separator/>
+                        <filter string="Ruta" name="ruta_group" domain="[]" context="{'group_by': 'ruta_id'}"/>
+                        <filter string="Pedido" name="pedido_group" domain="[]" context="{'group_by': 'pedido'}"/>
+                        <filter string="Pedido" name="pedido_id_group" domain="[]" context="{'group_by': 'pedido_id'}"/>
+                        <filter string="Fecha Pedido" name="fecha_pedido_group" domain="[]" context="{'group_by': 'fecha_pedido'}"/>
+                        <filter string="Fecha Cierta" name="fecha_cierta_group" domain="[]" context="{'group_by': 'fecha_cierta'}"/>
+                        <filter string="Cliente" name="cliente_group" domain="[]" context="{'group_by': 'partner_id'}"/>
+                        <filter string="Producto" name="product_group" domain="[]" context="{'group_by': 'product_id'}"/>
+                        <filter string="Categoría" name="categ_id_group" domain="[]" context="{'group_by': 'categ_id'}"/>
+                        <filter string="Canal de Venta" name="canal_venta_id_group" domain="[]" context="{'group_by': 'canal_venta_id'}"/>
+                        <filter string="Tipo de Entrega" name="tipo_entrega_id_group" domain="[]" context="{'group_by': 'tipo_entrega_id'}"/>
+                        <filter string="Categoría" name="categ_id_group" domain="[]" context="{'group_by': 'categ_id'}"/>
+                        <filter string="Zona" name="zona_id_group" domain="[]" context="{'group_by': 'zona_id'}"/>
+                        <filter string="Estado" name="estado_group" domain="[]" context="{'group_by': 'estado'}"/>
+			    </search>
+		    </field>
+	    </record>
+	    <record id="lcd_rutas_horarios_detalle_detalle_view_tree_ol" model="ir.ui.view">
+		    <field name="name">lcd_rutas_horarios_detalle_detalle_view_tree_ol</field>
+		    <field name="model">lcd.rutas_horarios_detalle</field>
+		    <field name="arch" type="xml">
+			    <tree>
+				    <field name="ruta_id"/>
+				    <field name="pedido"/>
+				    <field name="fecha_pedido"/>
+				    <field name="partner_id"/>
+				    <field name="direccion"/>
+				    <field name="fecha_cierta"/>
+				    <field name="product_id"/>
+				    <field name="categ_id"/>
+				    <field name="canal_venta_id"/>
+				    <field name="tipo_entrega_id"/>
+				    <field name="zona_id"/>
+				    <field name="estado"/>
+                </tree>
+		    </field>
+	    </record>
+
+        <record id="action_rutas_horarios_detalle" model="ir.actions.act_window">
+            <field name="name">Rutas/Horarios Detalle</field>
+            <field name="res_model">lcd.rutas_horarios_detalle</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+<!--Fin-->
+        <menuitem id="menu_rutas_horarios_main" name="Rutas/Horarios" parent="lcd_optimizacion_logistica.optimizacion_menu_root" sequence="6"/>
+            <menuitem id="menu_rutas_horarios" name="Rutas/Horarios" action="action_rutas_horarios" parent="menu_rutas_horarios_main" sequence="1"/>
+            <menuitem id="menu_rutas_horarios_detalle" name="Detalle de Rutas/Horarios" action="action_rutas_horarios_detalle" parent="menu_rutas_horarios_main" sequence="2"/>
+    </data>
+</odoo>

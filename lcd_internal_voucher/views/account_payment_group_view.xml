@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Agrega campo provisorio en Recibo  y contexto move_id en payment_ids(lineas de pago) -->
+    <record id="view_account_view_payment_group_form2" model="ir.ui.view">
+        <field name="name">account.payment.group.form2</field>
+        <field name="model">account.payment.group</field>
+        <field name="inherit_id" ref="account_payment_group.view_account_payment_group_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="provisional" invisible="1"/>
+            </field>
+            <field name="payment_ids" position="attributes">
+                <attribute name="context">{"move_id": context.get("move_id"),'default_payment_group_company_id': company_id, 'default_payment_type': partner_type == 'supplier' and 'outbound' or 'inbound', 'default_payment_date': payment_date, 'default_partner_id': partner_id, 'default_partner_type': partner_type, 'payment_group': True, 'tree_view_ref': 'account_payment_group.view_account_payment_from_group_tree'}</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

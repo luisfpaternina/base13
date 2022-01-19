@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Reglas para restringir usuarios a CI -->
+        <!-- Grupo Usuario accede a los Diarios fiscales  -->
+        <record model="ir.rule" id="group_voucher_user_rule">
+            <field name="name">Comprobantes Internos: No se muestran</field>
+            <field name="model_id" ref="model_account_journal"/>
+            <field name="groups" eval="[(4, ref('lcd_internal_voucher.group_voucher_user'))]"/>
+            <field name="domain_force">
+                [('provisional', '=', False)]
+            </field>
+        </record>
+        <!-- Grupo Usuario accede a Recibos fiscales  -->
+        <record model="ir.rule" id="group_voucher_user_rule2">
+            <field name="name">Error consulte administrador</field>
+            <field name="model_id" ref="model_account_payment_group"/>
+            <field name="groups" eval="[(4, ref('lcd_internal_voucher.group_voucher_user'))]"/>
+            <field name="domain_force">
+                [('provisional', '=', False)]
+            </field>
+        </record>
+        <!-- Grupo Usuario accede a Facturas Fiscales  -->
+        <record model="ir.rule" id="group_voucher_user_rule3">
+            <field name="name">Error</field>
+            <field name="model_id" ref="model_account_move"/>
+            <field name="groups" eval="[(4, ref('lcd_internal_voucher.group_voucher_user'))]"/>
+            <field name="domain_force">
+                [('journal_id.provisional', '=', False)]
+            </field>
+        </record>
+        <!-- Grupo Usuario accede a las Cuentas fiscales en libro Mayor / libro Mayor por Empresa -->
+        <record model="ir.rule" id="group_voucher_user_rule4">
+            <field name="name">Error consulte administrador</field>
+            <field name="model_id" ref="model_account_move_line"/>
+            <field name="groups" eval="[(4, ref('lcd_internal_voucher.group_voucher_user'))]"/>
+            <field name="domain_force">
+                [('move_id.journal_id.provisional', '=', False)]
+            </field>
+        </record>
+        <!-- Grupo Usuario accede a SO(Presupuestos y Ordenes de Venta) fiscales -->
+        <record model="ir.rule" id="group_voucher_user_rule5">
+            <field name="name">Error consulte administrador</field>
+            <field name="model_id" ref="model_sale_order"/>
+            <field name="groups" eval="[(4, ref('lcd_internal_voucher.group_voucher_user'))]"/>
+            <field name="domain_force">
+                [('provisional', '=', False)]
+            </field>
+        </record>
+        <!-- Grupo Usuario accede a PO(Presupuestos y Ordenes de Compra) fiscales -->
+        <record model="ir.rule" id="group_voucher_user_rule6">
+            <field name="name">Error consulte administrador</field>
+            <field name="model_id" ref="model_purchase_order"/>
+            <field name="groups" eval="[(4, ref('lcd_internal_voucher.group_voucher_user'))]"/>
+            <field name="domain_force">
+                [('provisional', '=', False)]
+            </field>
+        </record>
+        <!-- Grupo Usuario accede a Orden de entrega / Recepción fiscales -->
+        <record model="ir.rule" id="group_voucher_user_rule7">
+            <field name="name">Error consulte administrador</field>
+            <field name="model_id" ref="model_stock_picking"/>
+            <field name="groups" eval="[(4, ref('lcd_internal_voucher.group_voucher_user'))]"/>
+            <field name="domain_force">
+                [('provisional', '=', False)]
+            </field>
+        </record>
+        <!-- Grupo Admin accede a todos los Diarios provisorios y fiscales  -->
+        <record model="ir.rule" id="group_voucher_all_rule">
+            <field name="name">Comprobantes Internos: Todos</field>
+            <field name="model_id" ref="model_account_journal"/>
+            <field name="groups" eval="[(4, ref('lcd_internal_voucher.group_voucher_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+        <!-- Grupo Admin accede a todos los Recibos provisorios y fiscales  -->
+        <record model="ir.rule" id="group_voucher_all_rule2">
+            <field name="name">Comprobantes Internos: Todos</field>
+            <field name="model_id" ref="model_account_payment_group"/>
+            <field name="groups" eval="[(4, ref('lcd_internal_voucher.group_voucher_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+        <!-- Grupo Admin accede a todos las Facturas provisorias y fiscales  -->
+        <record model="ir.rule" id="group_voucher_all_rule3">
+            <field name="name">Comprobantes Internos: Todos</field>
+            <field name="model_id" ref="model_account_move"/>
+            <field name="groups" eval="[(4, ref('lcd_internal_voucher.group_voucher_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+        <!-- Grupo Admin accede a todos las Cuentas en libro Mayor / libro Mayor por Empresa -->
+        <record model="ir.rule" id="group_voucher_all_rule4">
+            <field name="name">Comprobantes Internos: Todos</field>
+            <field name="model_id" ref="model_account_move_line"/>
+            <field name="groups" eval="[(4, ref('lcd_internal_voucher.group_voucher_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+         <!-- Grupo Admin accede a SO(Presupuestos y Ordenes de Venta) fiscales y no fiscales -->
+        <record model="ir.rule" id="group_voucher_all_rule5">
+            <field name="name">Comprobantes Internos: Todos</field>
+            <field name="model_id" ref="model_sale_order"/>
+            <field name="groups" eval="[(4, ref('lcd_internal_voucher.group_voucher_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+        <!-- Grupo Admin accede a PO(Presupuestos y Ordenes de Compra) fiscales y no fiscales -->
+        <record model="ir.rule" id="group_voucher_all_rule6">
+            <field name="name">Comprobantes Internos: Todos</field>
+            <field name="model_id" ref="model_purchase_order"/>
+            <field name="groups" eval="[(4, ref('lcd_internal_voucher.group_voucher_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+        <!-- Grupo Admin accede a a Orden de entrega / Recepción fiscales y no fiscales -->
+        <record model="ir.rule" id="group_voucher_all_rule7">
+            <field name="name">Comprobantes Internos: Todos</field>
+            <field name="model_id" ref="model_stock_picking"/>
+            <field name="groups" eval="[(4, ref('lcd_internal_voucher.group_voucher_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+    </data>
+</odoo>

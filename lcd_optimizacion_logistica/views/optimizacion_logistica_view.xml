@@ -1,0 +1,311 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+<!-- Optimización Logistica Search - tree - form - action-->
+	    <record id="optimizacion_logistica_view_search_ol" model="ir.ui.view">
+		    <field name="name">optimizacion_logistica_view_search_ol</field>
+		    <field name="model">optimizacion.logistica</field>
+		    <field name="arch" type="xml">
+			    <search>
+				    <field name="name"/>
+				    <field name="fechas_fabricacion"/>
+				    <field name="fechas_entrega"/>
+				    <field name="estado"/>
+                    <separator/>
+                        <filter string="Pendiente" domain="[('estado', '=', 'pendiente')]" name="pendiente_filter"/>
+                        <filter string="En Proceso" domain="[('estado', '=', 'en_proceso')]" name="en_proceso_filter"/>
+                        <filter string="Optimizado" domain="[('estado', '=', 'optimizado')]" name="optimizado_filter"/>
+                        <filter string="Cancelado" domain="[('estado', '=', 'cancelado')]" name="cancelado_filter"/>
+                    <separator/>
+                        <filter string="Estado" name="estado_group" domain="[]" context="{'group_by': 'estado'}"/>
+			    </search>
+		    </field>
+	    </record>
+	    <record id="optimizacion_logistica_view_tree_ol" model="ir.ui.view">
+		    <field name="name">optimizacion_logistica_view_tree_ol</field>
+		    <field name="model">optimizacion.logistica</field>
+		    <field name="arch" type="xml">
+			    <tree>
+				    <field name="name"/>
+				    <field name="fechas_fabricacion"/>
+				    <field name="fechas_entrega"/>
+				    <field name="estado"/>
+			    </tree>
+		    </field>
+	    </record>
+	    <record id="optimizacion_logistica_view_form_ol" model="ir.ui.view">
+		    <field name="name">optimizacion_logistica_view_form_ol</field>
+		    <field name="model">optimizacion.logistica</field>
+		    <field name="arch" type="xml">
+			    <form string="Optimización Logística">
+                    <header>
+                        <button name="confirmar" type="object" string="Confirmar" class="oe_highlight" attrs="{'invisible': [('estado', '!=','borrador')]}"/>
+                        <field name="estado" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+        				    <field name="fechas_fabricacion" widget="multiple_datepicker" attrs="{'readonly': [('estado', 'in',['optimizado','cancelado'])]}"/>
+        				    <field name="fechas_entrega" widget="multiple_datepicker" attrs="{'readonly': [('estado', 'in',['optimizado','cancelado'])]}"/>
+                            <button name="cargar_optimizacion" type="object" string="Cargar Optimización" class="oe_highlight" attrs="{'invisible': [('estado', 'in',['optimizado','cancelado'])]}"/>
+                        </group>
+                        <group>
+        				    <field name="warnings" readonly="1" widget="html"/>
+        				    <field name="capacidad_excedida" invisible="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Detalle" name="detalle_ol">
+                                <!--button name="asignar_camion_bodega" type="object" string="Asignar Camión/Bodega" class="oe_highlight" attrs="{'invisible': ['|',('items', '=',False),('estado', 'in',['optimizado','cancelado'])]}"/-->
+                                <field name="items" attrs="{'readonly': [('estado', 'in',['optimizado','cancelado'])]}">
+                                    <tree editable="bottom" decoration-danger="color==2" decoration-warning="color==1" decoration-primary="cantidad_a_realizar&gt;cantidad_ov-cantidad_realizada">
+                    				    <field name="bolsa_line_id"/>
+                    				    <field name="bolsa_id"/>
+                    				    <field name="pedido"/>
+                    				    <field name="pedido_id"/>
+                    				    <field name="mrp_production_id"/>
+                    				    <field name="fecha_pedido"/>
+                    				    <field name="partner_id"/>
+                    				    <field name="direccion"/>
+                    				    <field name="product_id"/>
+                    				    <field name="volumen"/>
+                    				    <field name="fecha_cierta"/>
+                    				    <field name="categ_id"/>
+                    				    <field name="zona_id"/>
+                    				    <field name="canal_venta_id"/>
+                    				    <field name="tipo_entrega_id"/>
+                    				    <field name="cantidad_ov"/>
+                    				    <field name="cantidad_realizada"/>
+                    				    <field name="cantidad_a_realizar"  attrs="{'readonly': [('estado', 'in',['terminado'])]}"/>
+                    				    <field name="fecha_fabricacion"  attrs="{'readonly': [('estado', 'in',['terminado'])]}"/>
+                    				    <field name="fecha_entrega"  attrs="{'readonly': [('estado', 'in',['terminado'])]}"/>
+				                        <field name="bodega_id" attrs="{'readonly': [('estado', 'in',['terminado'])]}"/>
+				                        <field name="camion_id" attrs="{'readonly': [('estado', 'in',['terminado'])]}"/>
+                    				    <field name="estado" readonly="1"/>
+                    				    <field name="fabricar"/>
+                    				    <field name="color" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Totales" name="totales_ol">
+                                <group col="4">
+                                    <field name="totales_categ" readonly="1">
+                                        <tree default_order="fecha">
+                        				    <field name="fecha"/>
+                        				    <field name="categ_id"/>
+                        				    <field name="total" sum="Total"/>
+                                        </tree>
+                                    </field>
+                                    <field name="totales_prod" readonly="1">
+                                        <tree default_order="fecha">
+                        				    <field name="fecha"/>
+                        				    <field name="product_id"/>
+                        				    <field name="total" sum="Total"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Rutas" name="rutas" attrs="{'invisible': [('estado', 'in',['borrador'])]}">
+                                <group>
+                                    <field name="rutas_ids" readonly="1">
+                                        <tree default_order="fecha_despacho">
+                        				    <field name="name"/>
+                        				    <field name="camion_id"/>
+                        				    <field name="fecha_despacho"/>
+                        				    <field name="bodega_id"/>
+                        				    <field name="estado"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+			    </form>
+		    </field>
+	    </record>
+        <record id="action_optimizacion_logistica" model="ir.actions.act_window">
+            <field name="name">Optimización Logística</field>
+            <field name="res_model">optimizacion.logistica</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+<!-- Optimización Logistica Detalle Search - tree - form - action-->
+	    <record id="optimizacion_logistica_detalle_view_search_ol" model="ir.ui.view">
+		    <field name="name">optimizacion_logistica_detalle_view_search_ol</field>
+		    <field name="model">optimizacion.logistica.detalle</field>
+		    <field name="arch" type="xml">
+			    <search>
+				    <field name="optimizacion_id"/>
+				    <field name="bolsa_id"/>
+				    <field name="pedido"/>
+				    <field name="pedido_id"/>
+				    <field name="fecha_pedido"/>
+				    <field name="fecha_cierta"/>
+				    <field name="fecha_fabricacion"/>
+				    <field name="partner_id"/>
+				    <field name="product_id"/>
+				    <field name="categ_id"/>
+				    <field name="canal_venta_id"/>
+				    <field name="tipo_entrega_id"/>
+				    <field name="zona_id"/>
+				    <field name="bodega_id"/>
+				    <field name="camion_id"/>
+				    <field name="estado"/>
+				    <field name="fecha_cierta"/>
+                    <separator/>
+                        <filter string="Borrador" domain="[('estado', '=', 'borrador')]" name="borrador_filter"/>
+                        <filter string="Terminado" domain="[('estado', '=', 'terminado')]" name="terminado_filter"/>
+                    <separator/>
+                        <filter string="Optimización" name="optimizacion_group" domain="[]" context="{'group_by': 'optimizacion_id'}"/>
+                        <filter string="Bolsa" name="bolsa_group" domain="[]" context="{'group_by': 'bolsa_id'}"/>
+                        <filter string="Pedido" name="pedido_group" domain="[]" context="{'group_by': 'pedido'}"/>
+                        <filter string="Pedido" name="pedido_id_group" domain="[]" context="{'group_by': 'pedido_id'}"/>
+                        <filter string="Fecha Pedido" name="fecha_pedido_group" domain="[]" context="{'group_by': 'fecha_pedido'}"/>
+                        <filter string="Fecha Cierta" name="fecha_cierta_group" domain="[]" context="{'group_by': 'fecha_cierta'}"/>
+                        <filter string="Fecha de Fabricación" name="fecha_fabricacion_group" domain="[]" context="{'group_by': 'fecha_fabricacion'}"/>
+                        <filter string="Cliente" name="cliente_group" domain="[]" context="{'group_by': 'partner_id'}"/>
+                        <filter string="Producto" name="product_group" domain="[]" context="{'group_by': 'product_id'}"/>
+                        <filter string="Categoría" name="categ_id_group" domain="[]" context="{'group_by': 'categ_id'}"/>
+                        <filter string="Canal de Venta" name="canal_venta_id_group" domain="[]" context="{'group_by': 'canal_venta_id'}"/>
+                        <filter string="Tipo de Entrega" name="tipo_entrega_id_group" domain="[]" context="{'group_by': 'tipo_entrega_id'}"/>
+                        <filter string="Categoría" name="categ_id_group" domain="[]" context="{'group_by': 'categ_id'}"/>
+                        <filter string="Zona" name="zona_id_group" domain="[]" context="{'group_by': 'zona_id'}"/>
+                        <filter string="Bodega" name="bodega_id_group" domain="[]" context="{'group_by': 'bodega_id'}"/>
+                        <filter string="Camion" name="camion_id_group" domain="[]" context="{'group_by': 'camion_id'}"/>
+                        <filter string="Fabricable" name="fabricar_group" domain="[]" context="{'group_by': 'fabricar'}"/>
+                        <filter string="Estado" name="estado_group" domain="[]" context="{'group_by': 'estado'}"/>
+			    </search>
+		    </field>
+	    </record>
+	    <record id="optimizacion_logistica_detalle_view_tree_ol" model="ir.ui.view">
+		    <field name="name">optimizacion_logistica_detalle_view_tree_ol</field>
+		    <field name="model">optimizacion.logistica.detalle</field>
+		    <field name="arch" type="xml">
+			    <tree>
+			        <field name="optimizacion_id"/>
+				    <field name="bolsa_id"/>
+				    <field name="bolsa_line_id"/>
+				    <field name="pedido"/>
+				    <field name="pedido_id"/>
+				    <field name="mrp_production_id"/>
+				    <field name="fecha_pedido"/>
+				    <field name="partner_id"/>
+				    <field name="direccion"/>
+				    <field name="product_id"/>
+				    <field name="volumen" sum="Total"/>
+				    <field name="fecha_cierta"/>
+				    <field name="categ_id"/>
+				    <field name="zona_id"/>
+				    <field name="canal_venta_id"/>
+				    <field name="tipo_entrega_id"/>
+				    <field name="cantidad_ov"/>
+				    <field name="cantidad_realizada"/>
+				    <field name="cantidad_a_realizar"/>
+				    <field name="fecha_fabricacion"/>
+				    <field name="fecha_entrega"/>
+                    <field name="bodega_id"/>
+                    <field name="camion_id"/>
+				    <field name="fabricar"/>
+				    <field name="estado"/>
+                </tree>
+		    </field>
+	    </record>
+
+	    <record id="optimizacion_logistica_detalle_view_form_ol" model="ir.ui.view">
+		    <field name="name">optimizacion_logistica_detalle_view_form_ol</field>
+		    <field name="model">optimizacion.logistica.detalle</field>
+		    <field name="arch" type="xml">
+			    <form string="Detalle de Optimización Logística">
+                    <header>
+                        <field name="estado" widget="statusbar" readonly="1"/>
+                    </header>
+			        <sheet>
+    			        <group col="4">
+				            <field name="optimizacion_id" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="bolsa_id" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="bolsa_line_id" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="pedido" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="pedido_id" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="mrp_production_id" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="fecha_pedido" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="partner_id" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="direccion" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="product_id" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="volumen" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="fecha_cierta" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="categ_id" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="zona_id" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="canal_venta_id" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="tipo_entrega_id" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="cantidad_ov" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="cantidad_realizada" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="cantidad_a_realizar" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="fecha_fabricacion" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="fecha_entrega" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+                            <field name="bodega_id" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+                            <field name="camion_id" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+				            <field name="fabricar" attrs="{'readonly': [('estado', 'in',['terminado','cancelado'])]}"/>
+    			        </group>
+                    </sheet>
+                </form>
+		    </field>
+	    </record>
+
+        <record id="action_optimizacion_logistica_detalle" model="ir.actions.act_window">
+            <field name="name">Optimización Logística Detalle</field>
+            <field name="res_model">optimizacion.logistica.detalle</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+<!--Fin-->
+
+	    <record id="product_category_form_view_ol" model="ir.ui.view">
+		    <field name="name">product_category_form_view_ol</field>
+		    <field name="model">product.category</field>
+		    <field name="inherit_id" ref="product.product_category_form_view"/>
+		    <field name="arch" type="xml">
+			    <field name="parent_id" position="after">
+				    <field name="capacidad_fabricacion"/>
+				    <field name="maximo_permitido"/>
+			    </field>
+		    </field>
+	    </record>
+
+        <record id="product_category_number_view_tree" model="ir.ui.view">
+            <field name="name">product_category_number_view_tree</field>
+            <field name="model">product.category</field>
+            <field name="arch" type="xml">
+                <tree string="N° de Productos por Categoría" editable="bottom" create="0" delete="0">
+                    <field name="name" readonly="1"/>
+                    <field name="capacidad_fabricacion"/>
+				    <field name="maximo_permitido"/>
+                </tree>
+            </field>
+        </record>	
+
+        <record id="action_productos_por_categoria" model="ir.actions.act_window">
+            <field name="name">N° de Productos por Categoría</field>
+            <field name="res_model">product.category</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="product_category_number_view_tree"/>
+        </record>
+
+    <menuitem id="optimizacion_menu_root" name="Optimización Logística" web_icon="lcd_optimizacion_logistica,static/description/icon.png" active="True" sequence="7"/>
+        <menuitem id="menu_optimizacion_logistica" name="Optimización Logística" parent="optimizacion_menu_root" sequence="5"/>
+            <menuitem id="sub_menu_optimizacion_logistica" name="Optimización Logística" parent="menu_optimizacion_logistica" action="action_optimizacion_logistica" sequence="1"/>
+            <menuitem id="submenu_optimizacion_logistica_detalle" name="Optimización Logística Detalle" parent="menu_optimizacion_logistica" action="action_optimizacion_logistica_detalle" sequence="2"/>
+        <menuitem id="menu_optimizacion_config" name="Configuración" parent="optimizacion_menu_root" sequence="8"/>
+            <menuitem id="submenu_camiones" name="Camiones" parent="menu_optimizacion_config" action="lcd_optimizacion_logistica.action_lcd_camiones" sequence="6"/>
+            <menuitem id="submenu_bodegas" name="Bodegas" parent="menu_optimizacion_config" action="lcd_optimizacion_logistica.action_lcd_bodegas" sequence="7"/>
+            <menuitem id="submenu_tipo_vehiculo" name="Tipos de Vehículo" parent="menu_optimizacion_config" action="lcd_optimizacion_logistica.action_tipo_vehiculo" sequence="8"/>
+            <menuitem id="submenu_tipo_entrega_ol" name="Tipos de Entrega" parent="menu_optimizacion_config" action="lcd_optimizacion_logistica.action_sale_order_tipo_entrega" sequence="9"/>
+            <menuitem id="submenu_productos_por_categoria_ol" name="N° de Productos por Categoría" parent="menu_optimizacion_config" action="lcd_optimizacion_logistica.action_productos_por_categoria" sequence="10"/>
+    </data>
+</odoo>

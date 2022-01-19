@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Agrega campo provisorio en Presupuesto Venta / Pedido Venta  -->
+    <record id="view_sale_order_form2" model="ir.ui.view">
+        <field name="name">sale.order.form2</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+           <field name="client_order_ref" position="after">
+                <field name="provisional"/>
+            </field>
+        </field>
+    </record>
+</odoo>

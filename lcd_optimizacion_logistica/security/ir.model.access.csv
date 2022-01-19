@@ -1,0 +1,33 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sale_order_canal_all,sale order canal all,model_sale_order_canal,,1,0,0,0
+access_sale_order_tipo_entrega_all,sale order tipo entrega all,model_sale_order_tipo_entrega,,1,0,0,0
+access_sale_order_zona_all,sale order zona all,model_sale_order_zona,,1,0,0,0
+access_sale_order_zip_all,sale order zip all,model_sale_order_zip,,1,0,0,0
+access_lcd_camion_all,Lcd camion all,model_lcd_camion,,1,0,0,0
+access_lcd_bodega_all,Lcd bodega all,model_lcd_bodega,,1,0,0,0
+access_lcd_tipo_vehiculo_all,Lcd tipo vehiculo all,model_lcd_tipo_vehiculo,,1,0,0,0
+access_bolsa_ventas_all,Bolsa Ventas all,model_bolsa_ventas,,1,0,0,0
+access_bolsa_ventas_detalle_all,Bolsa Ventas Detalle all,model_bolsa_ventas_detalle,,1,0,0,0
+access_optimizacion_logistica_all,Optimizacion Logistica all,model_optimizacion_logistica,,1,0,0,0
+access_optimizacion_logistica_detalle_all,Optimizacion Logistica Detalle all,model_optimizacion_logistica_detalle,,1,0,0,0
+access_optimizacion_logistica_detalle_categ_all,Optimizacion Logistica Detalle Categ all,model_optimizacion_logistica_detalle_categ,,1,0,0,0
+access_optimizacion_logistica_detalle_prod_all,Optimizacion Logistica Detalle Prod all,model_optimizacion_logistica_detalle_prod,,1,0,0,0
+access_rutas_horarios_all,Rutas Horarios all,model_lcd_rutas_horarios,,1,0,0,0
+access_rutas_horarios_detalle_all,Rutas Horarios Detalle all,model_lcd_rutas_horarios_detalle,,1,0,0,0
+access_rutas_horarios_detalle_group_all,Rutas Horarios Detalle Group all,model_lcd_rutas_horarios_detalle_group,,1,0,0,0
+access_sale_order_canal_manager,sale order canal manager,model_sale_order_canal,sales_team.group_sale_manager,1,1,1,1
+access_sale_order_tipo_entrega_manager,sale order tipo entrega manager,model_sale_order_tipo_entrega,sales_team.group_sale_manager,1,1,1,1
+access_sale_order_zona_manager,sale order zona manager,model_sale_order_zona,sales_team.group_sale_manager,1,1,1,1
+access_sale_order_zip_manager,sale order zip manager,model_sale_order_zip,sales_team.group_sale_manager,1,1,1,1
+access_lcd_camion_manager,Lcd camion manager,model_lcd_camion,sales_team.group_sale_manager,1,1,1,1
+access_lcd_bodega_manager,Lcd bodega manager,model_lcd_bodega,sales_team.group_sale_manager,1,1,1,1
+access_lcd_tipo_vehiculo_manager,Lcd tipo vehiculo manager,model_lcd_tipo_vehiculo,sales_team.group_sale_manager,1,1,1,1
+access_bolsa_ventas_manager,Bolsa Ventas manager,model_bolsa_ventas,sales_team.group_sale_manager,1,1,1,1
+access_bolsa_ventas_detalle_manager,Bolsa Ventas Detalle manager,model_bolsa_ventas_detalle,sales_team.group_sale_manager,1,1,1,1
+access_optimizacion_logistica_manager,Optimizacion Logistica manager,model_optimizacion_logistica,sales_team.group_sale_manager,1,1,1,1
+access_optimizacion_logistica_detalle_manager,Optimizacion Logistica Detalle manager,model_optimizacion_logistica_detalle,sales_team.group_sale_manager,1,1,1,1
+access_optimizacion_logistica_detalle_categ_manager,Optimizacion Logistica Detalle Categ manager,model_optimizacion_logistica_detalle_categ,sales_team.group_sale_manager,1,1,1,1
+access_optimizacion_logistica_detalle_prod_manager,Optimizacion Logistica Detalle Prod manager,model_optimizacion_logistica_detalle_prod,sales_team.group_sale_manager,1,1,1,1
+access_rutas_horarios_manager,Rutas Horarios manager,model_lcd_rutas_horarios,sales_team.group_sale_manager,1,1,1,1
+access_rutas_horarios_detalle_manager,Rutas Horarios Detalle manager,model_lcd_rutas_horarios_detalle,sales_team.group_sale_manager,1,1,1,1
+access_rutas_horarios_detalle_group_manager,Rutas Horarios Detalle Group manager,model_lcd_rutas_horarios_detalle_group,sales_team.group_sale_manager,1,1,1,1

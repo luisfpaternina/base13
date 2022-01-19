@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Grupos para restringir usuarios a CI -->
+    <!-- Grupos usuario solo documentos fiscales -->
+    <record id="group_voucher_user" model="res.groups">
+        <field name="name">Usuario</field>
+        <field name="category_id" ref="base.module_category_voucher"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    <!-- Grupo Administrador documentos fiscales y provisorios -->
+    <record id="group_voucher_admin" model="res.groups">
+        <field name="name">Administrador</field>
+        <field name="category_id" ref="base.module_category_voucher"/>
+        <field name="implied_ids" eval="[(4, ref('group_voucher_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+    </record>
+
+ </odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Pasamos contexto move_id en el boton de registrar pago en factura  -->
+    <record id="view_account_move_form2" model="ir.ui.view">
+        <field name="name">account.move.form2</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account_payment_group.view_move_form"/>
+        <field name="arch" type="xml">
+           <button name="action_account_invoice_payment_group" position="attributes">
+               <attribute name="context">{"move_id": id,}</attribute>
+            </button>
+        </field>
+    </record>
+</odoo>

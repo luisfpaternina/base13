@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Agrega campo provisorio en cada Diario  -->
+    <record id="view_account_view_journal_form2" model="ir.ui.view">
+        <field name="name">account.account.form2</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <field name="account_control_ids" position="after">
+                <field name="provisional"/>
+            </field>
+        </field>
+    </record>
+</odoo>

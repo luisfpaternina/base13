@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+<!--Tipo de Vehículo -->
+        <record id="view_lcd_tipo_vehiculo_search_ol" model="ir.ui.view">
+            <field name="name">view_lcd_tipo_vehiculo_search_ol</field>
+            <field name="model">lcd.tipo_vehiculo</field>
+            <field name="arch" type="xml">
+                <search string="Tipos de Vehículo">
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>	
+        <record id="view_lcd_tipo_vehiculo_tree_ol" model="ir.ui.view">
+            <field name="name">view_lcd_tipo_vehiculo_tree_ol</field>
+            <field name="model">lcd.tipo_vehiculo</field>
+            <field name="arch" type="xml">
+                <tree string="Tipos de Vehículo" editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_tipo_vehiculo" model="ir.actions.act_window">
+            <field name="name">Tipos de Vehículo</field>
+            <field name="res_model">lcd.tipo_vehiculo</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+<!--Camiones -->
+        <record id="view_lcd_camion_search_ol" model="ir.ui.view">
+            <field name="name">view_lcd_camion_search_ol</field>
+            <field name="model">lcd.camion</field>
+            <field name="arch" type="xml">
+                <search string="Camiones">
+                    <field name="placa"/>
+                    <field name="tipo_vehiculo"/>
+                    <field name="capacidad"/>
+                    <field name="contratista_id"/>
+                    <field name="viajes_dia"/>
+                </search>
+            </field>
+        </record>	
+        <record id="view_lcd_camion_tree_ol" model="ir.ui.view">
+            <field name="name">view_lcd_camion_tree_ol</field>
+            <field name="model">lcd.camion</field>
+            <field name="arch" type="xml">
+                <tree string="Camiones" editable="bottom">
+                    <field name="placa"/>
+                    <field name="tipo_vehiculo"/>
+                    <field name="capacidad"/>
+                    <field name="contratista_id"/>
+                    <field name="viajes_dia"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_lcd_camiones" model="ir.actions.act_window">
+            <field name="name">Camiones</field>
+            <field name="res_model">lcd.camion</field>
+            <field name="view_mode">tree</field>
+        </record>
+    </data>
+</odoo>

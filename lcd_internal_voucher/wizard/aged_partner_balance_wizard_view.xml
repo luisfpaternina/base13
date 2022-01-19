@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- AGREGA CAMPOS A PARTNER BALANCE -->
+    <record id="general_report_wizard2" model="ir.ui.view">
+        <field name="name">General Ledger2</field>
+        <field name="model">general.ledger.report.wizard</field>
+        <field name="inherit_id" ref="account_financial_report.general_ledger_wizard"/>
+        <field name="arch" type="xml">
+            <field name="show_cost_center" position="after">
+              <field name="provisional2"/>
+              <field name="fiscal2"/>
+            </field>
+        </field>
+    </record>
+ </odoo>

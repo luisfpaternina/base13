@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.sale</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Optimización Logística" string="Optimización Logística" data-key="lcd_optimizacion">
+                    <h2>Optimización Logística</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box" id="dias_venta_setting">
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Días de Venta</span>
+                                <div class="text-muted">
+                                    Número de días que puede tardar el sistema en registrar una nueva bolsa de ventas
+                                </div>
+                                <div class="row mt16">
+                                    <label for="dias_de_venta" string="Días de Venta" class="col-lg-4 o_light_label"/>
+                                    <field name="dias_de_venta" class="oe_inline"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="maximo_fabricacion_mayoristas_setting">
+                            <div class="o_setting_right_pane">
+                                <div class="mt16">
+                                    Etiquetas para mayoristas:
+                                    <field name="etiquetas_mayoristas" class="oe_inline" widget="many2many_tags"/>
+                                    <field name="etiquetas_mayoristas_str" invisible="1"/>
+                                </div>
+                                <div class="text-muted">
+                                    Porcentaje tope máximo de productos relacionados a mayoristas que entrarán en la bolsa de ventas
+                                </div>
+                                <div class="row mt16">
+                                    <label for="maximo_fabricacion_mayoristas" string="Máximo de Fabricación Mayoristas" class="col-lg-4 o_light_label"/>
+                                    <field name="maximo_fabricacion_mayoristas" class="oe_inline"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_optimizacion_config_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_id" ref="res_config_settings_view_form"/>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'lcd_optimizacion', 'bin_size': False}</field>
+    </record>
+
+    <menuitem id="menu_optimizacion_general_settings"
+        name="Ajustes"
+        parent="menu_optimizacion_config"
+        sequence="5"
+        action="action_optimizacion_config_settings"/>
+
+</odoo>

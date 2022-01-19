@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+<!--Bodegas -->
+        <record id="view_lcd_bodega_search_ol" model="ir.ui.view">
+            <field name="name">view_lcd_bodega_search_ol</field>
+            <field name="model">lcd.bodega</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>	
+        <record id="view_lcd_bodega_tree_ol" model="ir.ui.view">
+            <field name="name">view_lcd_bodega_tree_ol</field>
+            <field name="model">lcd.bodega</field>
+            <field name="arch" type="xml">
+                <tree string="Bodega" editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_lcd_bodegas" model="ir.actions.act_window">
+            <field name="name">Bodegas</field>
+            <field name="res_model">lcd.bodega</field>
+            <field name="view_mode">tree</field>
+        </record>
+    </data>
+</odoo>

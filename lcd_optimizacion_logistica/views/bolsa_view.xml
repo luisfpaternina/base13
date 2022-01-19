@@ -1,0 +1,204 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+<!-- Search Bolsa Ventas / Bolsa Ventas Detalle-->
+	    <record id="bolsa_ventas_view_search_ol" model="ir.ui.view">
+		    <field name="name">bolsa_ventas_view_search_ol</field>
+		    <field name="model">bolsa.ventas</field>
+		    <field name="arch" type="xml">
+			    <search>
+				    <field name="fecha"/>
+				    <field name="name"/>
+				    <field name="estado"/>
+                    <separator/>
+                        <filter string="Abiertas" domain="[('estado', '=', 'abierta')]" name="abiertas"/>
+                        <filter string="En Proceso" domain="[('estado', '=', 'en_proceso')]" name="en_procesos"/>
+                        <filter string="Cerradas" domain="[('estado', '=', 'cerrada')]" name="cerradas"/>
+                    <separator/>
+                        <filter string="Estado" name="estado_group" domain="[]" context="{'group_by': 'estado'}"/>
+			    </search>
+		    </field>
+	    </record>
+	    <record id="bolsa_ventas_view_search_ol" model="ir.ui.view">
+		    <field name="name">bolsa_ventas_view_search_ol</field>
+		    <field name="model">bolsa.ventas.detalle</field>
+		    <field name="arch" type="xml">
+			    <search>
+				    <field name="pedido"/>
+				    <field name="pedido_id"/>
+				    <field name="mrp_production_id"/>
+				    <field name="fecha_pedido"/>
+				    <field name="partner_id"/>
+				    <field name="direccion"/>
+				    <field name="product_id"/>
+				    <field name="fecha_cierta"/>
+				    <field name="categ_id"/>
+				    <field name="zona_id"/>
+				    <field name="canal_venta_id"/>
+				    <field name="tipo_entrega_id"/>
+				    <field name="estado"/>
+                    <separator/>
+                        <filter string="Pendientes" domain="[('estado', '=', 'pendiente')]" name="pendientes"/>
+                        <filter string="En Proceso" domain="[('estado', '=', 'en_proceso')]" name="en_procesos"/>
+                        <filter string="Optimizados" domain="[('estado', '=', 'optimizado')]" name="optimizados"/>
+                        <filter string="Cancelados" domain="[('estado', '=', 'cancelado')]" name="cancelados"/>
+                    <separator/>
+                        <filter string="Pedido" name="pedido_group" domain="[]" context="{'group_by': 'pedido'}"/>
+                        <filter string="Pedido" name="pedido_id_group" domain="[]" context="{'group_by': 'pedido_id'}"/>
+                        <filter string="Cliente" name="cliente_group" domain="[]" context="{'group_by': 'partner_id'}"/>
+                        <filter string="Fecha Pedido" name="fecha_pedido_group" domain="[]" context="{'group_by': 'fecha_pedido'}"/>
+                        <filter string="Fecha Cierta" name="fecha_cierta_group" domain="[]" context="{'group_by': 'fecha_cierta'}"/>
+                        <filter string="Categoría" name="categoria_group" domain="[]" context="{'group_by': 'categ_id'}"/>
+                        <filter string="Zona" name="zona_group" domain="[]" context="{'group_by': 'zona_id'}"/>
+                        <filter string="Canal de Venta" name="canal_venta_group" domain="[]" context="{'group_by': 'canal_venta_id'}"/>
+                        <filter string="Tipo Entrega" name="tipo_entrega_group" domain="[]" context="{'group_by': 'tipo_entrega_id'}"/>
+                        <filter string="Estado" name="estado_group" domain="[]" context="{'group_by': 'estado'}"/>
+			    </search>
+		    </field>
+	    </record>
+<!-- Tree Bolsa Ventas / Bolsa Ventas Detalle-->
+	    <record id="bolsa_ventas_view_tree_ol" model="ir.ui.view">
+		    <field name="name">bolsa_ventas_view_tree_ol</field>
+		    <field name="model">bolsa.ventas</field>
+		    <field name="arch" type="xml">
+			    <tree>
+				    <field name="fecha"/>
+				    <field name="name"/>
+				    <field name="estado"/>
+			    </tree>
+		    </field>
+	    </record>
+	    <record id="bolsa_ventas_detalle_view_tree_ol" model="ir.ui.view">
+		    <field name="name">bolsa_ventas_detalle_view_tree_ol</field>
+		    <field name="model">bolsa.ventas.detalle</field>
+		    <field name="arch" type="xml">
+			    <tree>
+				    <field name="order_line_id" invisible="1"/>
+				    <field name="pedido"/>
+				    <field name="pedido_id"/>
+				    <field name="mrp_production_id"/>
+				    <field name="bolsa_id"/>
+				    <field name="fecha_pedido"/>
+				    <field name="partner_id"/>
+				    <field name="direccion"/>
+				    <field name="product_id"/>
+				    <field name="volumen"/>
+				    <field name="mayorista"/>
+				    <field name="fabricar"/>
+				    <field name="cantidad"/>
+				    <field name="cantidad_a_realizar"/>
+				    <field name="cantidad_realizada"/>
+				    <field name="fecha_cierta"/>
+				    <field name="categ_id"/>
+				    <field name="zona_id"/>
+				    <field name="canal_venta_id"/>
+				    <field name="tipo_entrega_id"/>
+				    <field name="estado"/>
+                    <!--button name="ignorar" type="object" string="Ignorar" attrs="{'invisible': [('estado', 'in',['en_proceso','optimizado','cancelado'])]}"/-->
+			    </tree>
+		    </field>
+	    </record>
+<!-- Form Bolsa Ventas / Bolsa Ventas Detalle-->
+	    <record id="bolsa_ventas_view_form_ol" model="ir.ui.view">
+		    <field name="name">bolsa_ventas_view_form_ol</field>
+		    <field name="model">bolsa.ventas</field>
+		    <field name="arch" type="xml">
+			    <form string="Bolsa de Ventas">
+                    <header>
+                        <field name="estado" widget="statusbar" statusbar_visible="abierta,en_proceso,cerrada"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+        				    <field name="fecha" readonly="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Detalle de Bolsa" name="detalle_bolsa">
+                                <field name="bolsa_lines">
+                                    <tree editable="bottom">
+                    				    <field name="order_line_id" invisible="1"/>
+                    				    <field name="pedido" readonly="1"/>
+                    				    <field name="pedido_id" readonly="1"/>
+                    				    <field name="mrp_production_id" readonly="1"/>
+                    				    <field name="fecha_pedido" readonly="1"/>
+                    				    <field name="partner_id" readonly="1"/>
+                    				    <field name="direccion" readonly="1"/>
+                    				    <field name="product_id" readonly="1"/>
+                    				    <field name="volumen" readonly="1"/>
+                    				    <field name="fecha_cierta" readonly="0"/>
+                    				    <field name="categ_id" readonly="1"/>
+                    				    <field name="zona_id" readonly="0"/>
+                    				    <field name="canal_venta_id" readonly="1"/>
+                    				    <field name="tipo_entrega_id" readonly="1"/>
+				                        <field name="mayorista" readonly="1"/>
+				                        <field name="fabricar" readonly="1"/>
+                    				    <field name="cantidad" readonly="1"/>
+                    				    <field name="cantidad_a_realizar" readonly="1"/>
+                    				    <field name="cantidad_realizada" readonly="1"/>
+                    				    <field name="estado" readonly="1"/>
+                                        <!--button name="ignorar" type="object" string="Ignorar" class="oe_highlight" attrs="{'invisible': [('estado', 'in',['en_proceso','optimizado','cancelado'])]}"/-->
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+			    </form>
+		    </field>
+	    </record>
+	    <record id="bolsa_ventas_detalle_view_form_ol" model="ir.ui.view">
+		    <field name="name">bolsa_ventas_detalle_view_form_ol</field>
+		    <field name="model">bolsa.ventas.detalle</field>
+		    <field name="arch" type="xml">
+			    <form string="Item de Bolsa de Ventas">
+                    <header>
+                        <field name="estado" widget="statusbar" statusbar_visible="pendiente,en_proceso,optimizado,cancelado"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="bolsa_id" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+        				    <field name="fecha_pedido"/>
+        				    <field name="partner_id"/>
+        				    <field name="direccion"/>
+        				    <field name="product_id"/>
+        				    <field name="volumen"/>
+        				    <field name="cantidad"/>
+        				    <field name="fecha_cierta"/>
+        				    <field name="categ_id"/>
+        				    <field name="zona_id"/>
+        				    <field name="canal_venta_id"/>
+        				    <field name="tipo_entrega_id"/>
+                        </group>
+                    </sheet>
+			    </form>
+		    </field>
+	    </record>
+<!-- Form Bolsa Ventas / Bolsa Ventas Acciones-->
+        <record id="action_bolsa_ventas" model="ir.actions.act_window">
+            <field name="name">Bolsas de Venta</field>
+            <field name="res_model">bolsa.ventas</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <record id="action_bolsa_ventas_detalle" model="ir.actions.act_window">
+            <field name="name">Detalle de Bolsas de Venta</field>
+            <field name="res_model">bolsa.ventas.detalle</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+<!-- Form Bolsa Ventas / Bolsa Ventas Items de Menú-->
+        <menuitem id="menu_bolsa_ventas_main" name="Bolsas de Venta" parent="lcd_optimizacion_logistica.optimizacion_menu_root" sequence="1"/>
+            <menuitem id="menu_bolsa_ventas" name="Bolsas de Venta" action="action_bolsa_ventas" parent="menu_bolsa_ventas_main" sequence="1"/>
+            <menuitem id="menu_bolsa_ventas_detalle" name="Detalle de Bolsas de Venta" action="action_bolsa_ventas_detalle" parent="menu_bolsa_ventas_main" sequence="2"/>
+    </data>
+</odoo>

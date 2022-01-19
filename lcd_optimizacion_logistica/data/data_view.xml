@@ -1,0 +1,46 @@
+<odoo>
+    <data noupdate="1">
+        <!-- Secuencia de bolsa de ventas-->
+        <record id="ir_sequence_bolsa_ventas" model="ir.sequence">
+            <field name="name">Bolsa de ventas</field>
+            <field name="code">bolsa.ventas</field>
+            <field name="prefix">BDV-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <!-- Secuencia de optimizacion logistica-->
+        <record id="ir_sequence_optimizacion_logistica" model="ir.sequence">
+            <field name="name">Optimización Logística</field>
+            <field name="code">optimizacion.logistica</field>
+            <field name="prefix">OL-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <!-- Secuencia de rutas y horarios-->
+        <record id="ir_sequence_ruta_horario" model="ir.sequence">
+            <field name="name">Rutas y Horarios</field>
+            <field name="code">lcd.rutas_horarios</field>
+            <field name="prefix">RUT-</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Acción planificada para crear bolsa de ventas-->
+        <record id="ir_cron_crear_bolsa_ventas" model="ir.cron">
+            <field name="name">Crear bolsa de ventas</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field name="state">code</field>
+            <field name="model_id" ref="model_bolsa_ventas"/>
+            <field name="code">model.chequear_bolsa()</field>
+        </record>
+        <!-- Secuencia de optimizacion logistica-->
+        <record id="sale_order_zona_sin_zona" model="sale.order.zona">
+            <field name="name">Zona sin Definir</field>
+            <field name="codigo">NN</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,30 @@
+<odoo>
+    <data>
+        <!--Agrego opcion de menu para autorizar multiples documentos-->
+        <record id="wzd_optimizacion_camion_bodega_form" model="ir.ui.view">
+            <field name="name">wzd_optimizacion_camion_bodega_form</field>
+            <field name="model">lcd.wzd_optimizacion_camion_bodega</field>
+            <field name="arch" type="xml">
+                <form string="Asignar Bodega y Camión">
+                    <sheet>
+                        <group>
+	                        <field name="bodega_id"/>
+	                        <field name="camion_id"/>
+                        </group>
+                        <footer>
+                            <button name="asignar" type="object" string="Asignar"/>
+                            <button string="Cerrar" class="oe_link" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <act_window id="action_asignar_camion_bodega"
+            name="Asignar Bodega y Camión"
+            binding_model="optimizacion.logistica.detalle"
+            res_model="lcd.wzd_optimizacion_camion_bodega"
+            view_mode="form"
+            target="new"
+            />
+    </data>
+</odoo>

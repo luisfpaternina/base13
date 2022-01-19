@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!-- Sobreescribo acción de presupuestos para que muestre solo los presupuestos-->
+        <record id="sale.action_quotations_with_onboarding" model="ir.actions.act_window">
+            <field name="context">{'search_default_draft':1,'search_default_my_quotation': 1}</field>
+        </record>
+
+	    <record id="sale_order_view_search_ol" model="ir.ui.view">
+		    <field name="name">sale_order_view_search_ol</field>
+		    <field name="model">sale.order</field>
+		    <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+		    <field name="arch" type="xml">
+			    <field name="order_line" position="after">
+				    <field name="canal_venta_id" required="1"/>
+				    <field name="tipo_entrega_id" required="1"/>
+				    <field name="zona_id" required="1"/>
+				    <field name="fecha_cierta"/>
+				    <field name="bolsa_id"/>
+			    </field>
+			    <filter name="my_sale_orders_filter" position="after">
+                    <filter string="Sin Optimizar" domain="[('pedido_sin_optimizar', '=', True)]" name="sin_optimizar"/>
+                    <filter string="Con Optimización" domain="[('pedido_sin_optimizar', '=',False)]" name="con_optimizar"/>
+			    </filter>
+			    <filter name="order_month" position="after">
+                    <filter string="Bolsa" name="bolsa_group" domain="[]" context="{'group_by': 'bolsa_id'}"/>
+                    <filter string="Canal de Venta" name="canal_venta_group" domain="[]" context="{'group_by': 'canal_venta_id'}"/>
+                    <filter string="Tipo de Entrega" name="tipo_entrega_group" domain="[]" context="{'group_by': 'tipo_entrega_id'}"/>
+                    <filter string="Zona" name="zona_group" domain="[]" context="{'group_by': 'zona_id'}"/>
+                    <filter string="Fecha Cierta" name="fecha_cierta_group" domain="[]" context="{'group_by': 'fecha_cierta'}"/>
+			    </filter>
+		    </field>
+	    </record>
+	    <record id="view_quotation_tree_ol" model="ir.ui.view">
+		    <field name="name">view_quotation_tree_ol</field>
+		    <field name="model">sale.order</field>
+		    <field name="inherit_id" ref="sale.view_quotation_tree"/>
+		    <field name="arch" type="xml">
+			    <field name="partner_id" position="after">
+				    <field name="canal_venta_id"/>
+				    <field name="tipo_entrega_id"/>
+				    <field name="zona_id"/>
+				    <field name="fecha_cierta"/>
+				    <field name="pedido_sin_optimizar"/>
+				    <field name="bolsa_id"/>
+			    </field>
+		    </field>
+	    </record>
+
+        <!-- Agrego canal, tipo entrega, zona, bolsa, fecha cierta y pedido sin optimizar en sale order view-->
+	    <record id="view_order_form_ol" model="ir.ui.view">
+		    <field name="name">view_order_form_ol</field>
+		    <field name="model">sale.order</field>
+		    <field name="inherit_id" ref="sale.view_order_form"/>
+		    <field name="arch" type="xml">
+			    <field name="partner_shipping_id" position="after">
+				    <field name="canal_venta_id" options="{'no_create': True, 'no_create_edit':True}"/>
+				    <field name="tipo_entrega_id" options="{'no_create': True, 'no_create_edit':True}"/>
+				    <field name="zona_id" options="{'no_create': True, 'no_create_edit':True}"/>
+			    </field>
+			    <field name="client_order_ref" position="after">
+				    <field name="bolsa_id" readonly="1"/>
+				    <field name="fecha_cierta"/>
+				    <field name="pedido_sin_optimizar"/>
+			    </field>
+		    </field>
+	    </record>
+
+        <!-- Oculto botón de crear entrega-->
+	    <record id="view_order_form_manual_delivery_ol" model="ir.ui.view">
+		    <field name="name">view_order_form_ol</field>
+		    <field name="model">sale.order</field>
+		    <field name="inherit_id" ref="sale_manual_delivery.view_order_form"/>
+		    <field name="arch" type="xml">
+    			<xpath expr="//button[@name='action_manual_delivery_wizard']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('pedido_sin_optimizar', '=', False)]}</attribute>
+    			</xpath>
+		    </field>
+	    </record>
+
+        <!-- Canales de Venta-->
+        <record id="sale_order_canal_view_search" model="ir.ui.view">
+            <field name="name">sale_order_canal_view_search</field>
+            <field name="model">sale.order.canal</field>
+            <field name="arch" type="xml">
+                <search string="Canales de Venta">
+                    <field name="name"/>
+                    <field name="codigo"/>
+                </search>
+            </field>
+        </record>	
+        <record id="sale_order_canal_view_tree" model="ir.ui.view">
+            <field name="name">sale_order_canal_view_tree</field>
+            <field name="model">sale.order.canal</field>
+            <field name="arch" type="xml">
+                <tree string="Canales de Venta" editable="bottom">
+                    <field name="name" width="50"/>
+                    <field name="codigo" width="30"/>
+                    <field name="dias_maximos" width="20"/>
+                </tree>
+            </field>
+        </record>	
+
+        <record id="action_sale_order_canal" model="ir.actions.act_window">
+            <field name="name">Canales de Venta</field>
+            <field name="res_model">sale.order.canal</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <!-- Tipos de Entrega-->
+        <record id="sale_order_tipo_entrega_view_search" model="ir.ui.view">
+            <field name="name">sale_order_tipo_entrega_view_search</field>
+            <field name="model">sale.order.tipo_entrega</field>
+            <field name="arch" type="xml">
+                <search string="Tipos de Entrega">
+                    <field name="name"/>
+                    <field name="codigo"/>
+                </search>
+            </field>
+        </record>	
+        <record id="sale_order_tipo_entrega_view_tree" model="ir.ui.view">
+            <field name="name">sale_order_tipo_entrega_view_tree</field>
+            <field name="model">sale.order.tipo_entrega</field>
+            <field name="arch" type="xml">
+                <tree string="Tipos de Entrega" editable="bottom">
+                    <field name="name" width="50"/>
+                    <field name="codigo" width="30"/>
+                    <field name="tiempo_entrega" width="20"/>
+                </tree>
+            </field>
+        </record>	
+
+        <record id="action_sale_order_tipo_entrega" model="ir.actions.act_window">
+            <field name="name">Tipos de Entrega</field>
+            <field name="res_model">sale.order.tipo_entrega</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <!-- Zonas-->
+        <record id="sale_order_zona_view_search" model="ir.ui.view">
+            <field name="name">sale_order_zona_view_search</field>
+            <field name="model">sale.order.zona</field>
+            <field name="arch" type="xml">
+                <search string="Zonas">
+                    <field name="name"/>
+                    <field name="codigo"/>
+                </search>
+            </field>
+        </record>	
+        <record id="sale_order_zona_view_tree" model="ir.ui.view">
+            <field name="name">sale_order_zona_view_tree</field>
+            <field name="model">sale.order.zona</field>
+            <field name="arch" type="xml">
+                <tree string="Zonas">
+                    <field name="name"/>
+                    <field name="codigo"/>
+                </tree>
+            </field>
+        </record>
+        <record id="sale_order_zona_view_form" model="ir.ui.view">
+            <field name="name">sale_order_zona_view_form</field>
+            <field name="model">sale.order.zona</field>
+            <field name="arch" type="xml">
+                <form string="Zona">
+                    <sheet>
+                        <group col="4">
+                            <field name="name"/>
+                            <field name="codigo"/>
+                        </group>
+                        <group>
+                            <field name="codigos_postales" widget="many2many_tags" domain="[('zona_id','=',False)]"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sale_order_zona" model="ir.actions.act_window">
+            <field name="name">Zonas</field>
+            <field name="res_model">sale.order.zona</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_canal_venta" name="Canales de Venta" action="action_sale_order_canal" parent="sale.menu_sale_config" sequence="300"/>
+        <menuitem id="menu_tipo_entrega" name="Tipos de Entrega" action="action_sale_order_tipo_entrega" parent="sale.menu_sale_config" sequence="301"/>
+        <menuitem id="menu_zona" name="Zonas" action="action_sale_order_zona" parent="sale.menu_sale_config" sequence="302"/>
+    </data>
+</odoo>

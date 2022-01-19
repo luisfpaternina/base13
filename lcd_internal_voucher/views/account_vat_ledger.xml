@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Agrega dominio al campo jounal_ids para mostrar Diario provisorio  -->
+    <record id="view_account_vat_ledger_form2" model="ir.ui.view">
+        <field name="name">account.vat.ledger.form2</field>
+        <field name="model">account.vat.ledger</field>
+        <field name="inherit_id" ref="l10n_ar_reports.account_vat_ledger_form"/>
+        <field name="arch" type="xml">
+            <field name="journal_ids" position="replace">
+                <field name="journal_ids" domain="[('type', '=', type), ('company_id', '=', company_id), ('provisional', '=', True)]"/>
+            </field>
+        </field>
+    </record>
+</odoo>
